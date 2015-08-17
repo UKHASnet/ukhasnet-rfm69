@@ -27,9 +27,9 @@ The library is hardware agnostic. The files `spi_conf.c` and `spi_conf.h`
 should be created by you, the user, which define device specific functions 
 that allow the library to communicate with the RFM69 module.  
 
-You will need to include `spi_conf.h`, `ukhasnet-rfm69.h` and
-`ukhasnet-rfm69-config.h` in your application code, and make sure
-`ukhasnet-rfm69.c` is built into the binary by your Makefile/IDE.  
+You will need to include `spi_conf.h` and `ukhasnet-rfm69.h` in your
+application code, and make sure `ukhasnet-rfm69.c` is built into the binary by
+your Makefile/IDE.  
 
 A generic example of these files can be found in `spi_conf/` and
 device-specific examples in that folder. For example, a working SPI driver for
