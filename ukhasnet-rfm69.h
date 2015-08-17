@@ -776,6 +776,7 @@ void rf69_spiBurstRead(const uint8_t reg, uint8_t* dest, uint8_t len);
 void rf69_spiBurstWrite(uint8_t reg, const uint8_t* src, uint8_t len);
 void rf69_spiFifoWrite(const uint8_t* src, uint8_t len);
 void rf69_setMode(const uint8_t newMode);
+bool rf69_receive(uint8_t* buf, uint8_t* len, int16_t* lastrssi);
 void rf69_send(const uint8_t* data, uint8_t len, uint8_t power);
 void rf69_clearFifo(void);
 int8_t rf69_readTemp(void);

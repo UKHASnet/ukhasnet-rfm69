@@ -164,32 +164,30 @@ void rf69_setMode(const uint8_t newMode)
     _mode = newMode;
 }
 
-/*boolean RFM69::checkRx()*/
-/*{*/
-    /*// Check IRQ register for payloadready flag (indicates RXed packet waiting in FIFO)*/
-    /*if(spiRead(RFM69_REG_28_IRQ_FLAGS2) & RF_IRQFLAGS2_PAYLOADREADY) {*/
-        /*// Get packet length from first byte of FIFO*/
-        /*_bufLen = spiRead(RFM69_REG_00_FIFO)+1;*/
-        /*// Read FIFO into our Buffer*/
-        /*spiBurstRead(RFM69_REG_00_FIFO, _buf, RFM69_FIFO_SIZE);*/
-        /*// Read RSSI register (should be of the packet? - TEST THIS)*/
-        /*_lastRssi = -(spiRead(RFM69_REG_24_RSSI_VALUE)/2);*/
-        /*// Clear the radio FIFO (found in HopeRF demo code)*/
-        /*clearFifo();*/
-        /*return true;*/
-    /*}*/
+/**
+ * Get data from the RFM69 receive buffer.
+ * @param buf A pointer into the local buffer in which we would like the data.
+ * @param len The length of the data
+ * @param lastrssi The RSSI of the packet we're getting
+ * @returns true on success, false is there's no packet waiting.
+ */
+bool rf69_receive(uint8_t* buf, uint8_t* len, int16_t* lastrssi)
+{
+    // Check IRQ register for payloadready flag (indicates RXed packet waiting in FIFO)
+    if(rf69_spiRead(RFM69_REG_28_IRQ_FLAGS2) & RF_IRQFLAGS2_PAYLOADREADY) {
+        // Get packet length from first byte of FIFO
+        *len = rf69_spiRead(RFM69_REG_00_FIFO)+1;
+        // Read FIFO into our Buffer
+        rf69_spiBurstRead(RFM69_REG_00_FIFO, buf, RFM69_FIFO_SIZE);
+        // Read RSSI register (should be of the packet? - TEST THIS)
+        *lastrssi = -(rf69_spiRead(RFM69_REG_24_RSSI_VALUE)/2);
+        // Clear the radio FIFO (found in HopeRF demo code)
+        rf69_clearFifo();
+        return true;
+    }
     
-    /*return false;*/
-/*}*/
-
-/*void RFM69::recv(uint8_t* buf, uint8_t* len)*/
-/*{*/
-    /*// Copy RX Buffer to byref Buffer*/
-    /*memcpy(buf, _buf, _bufLen);*/
-    /**len = _bufLen;*/
-    /*// Clear RX Buffer*/
-    /*_bufLen = 0;*/
-/*}*/
+    return false;
+}
 
 /**
  * Send a packet using the RFM69 radio.
