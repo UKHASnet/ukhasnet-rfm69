@@ -781,9 +781,9 @@ void rf69_clearFifo(void);
 int8_t rf69_readTemp(void);
 int16_t rf69_sampleRssi(void);
 
-extern bool rfm69_init(void);
-extern uint8_t spi_exchange_single(uint8_t out);
-extern void spi_ss_assert(void);
-extern void spi_ss_deassert(void);
+bool rfm69_init(void);
+uint8_t spi_exchange_single(uint8_t out);
+void spi_ss_assert(void);
+void spi_ss_deassert(void);
 
 #endif /* __RFM69_H__ */
