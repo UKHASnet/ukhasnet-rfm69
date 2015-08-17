@@ -781,6 +781,11 @@ void rf69_clearFifo(void);
 int8_t rf69_readTemp(void);
 int16_t rf69_sampleRssi(void);
 
+/**
+ * SPI device driver functions. These are to be provided by the user.
+ * Prototypes are provided here such that the library can be built.
+ * Documentation can be found in spi_conf.c.
+ */
 bool rfm69_init(void);
 uint8_t spi_exchange_single(uint8_t out);
 void spi_ss_assert(void);
