@@ -1,14 +1,20 @@
-// RFM69.h
-//
-// Ported to Arduino 2014 James Coxon
-//
-// Ported to bare metal AVR 2014 Jon Sowman
-//
-// Copyright (C) 2014 Phil Crump
-// Copyright (C) 2014 Jon Sowman <jon@jonsowman.com>
-//
-// Based on RF22 Copyright (C) 2011 Mike McCauley ported to mbed by Karl Zweimueller
-// Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
+/**
+ * RFM69.h
+ *
+ * This file is part of the UKHASNet (ukhas.net) maintained RFM69 library for
+ * use with all UKHASnet nodes, including Arduino, AVR and ARM.
+ *
+ * Ported to Arduino 2014 James Coxon
+ * Ported, tidied and hardware abstracted by Jon Sowman, 2015
+ *
+ * Copyright (C) 2014 Phil Crump
+ * Copyright (C) 2015 Jon Sowman <jon@jonsowman.com>
+ *
+ * Based on RF22 Copyright (C) 2011 Mike McCauley
+ * Ported to mbed by Karl Zweimueller
+ *
+ * Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
+ */
 
 #ifndef __RFM69_H__
 #define __RFM69_H__
