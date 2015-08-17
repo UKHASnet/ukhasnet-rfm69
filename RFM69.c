@@ -22,16 +22,6 @@
 #include "RFM69.h"
 #include "RFM69Config.h"
 
-/**
- * Assert SS on the RFM69 for communications.
- */
-#define RFM_SS_ASSERT() do { SPI_PORT &= ~(SPI_SS); } while(0)
-
-/**
- * Release SS on the RFM69 to abort or terminate comms
- */
-#define RFM_SS_DEASSERT() do { SPI_PORT |= (SPI_SS); } while(0)
-
 /** Track the current mode of the radio */
 static uint8_t _mode;
 
@@ -43,25 +33,6 @@ bool rf69_init(void)
 {
     uint8_t i;
 
-    /* Set up the SPI IO as appropriate */
-    SPI_DDR |= SPI_SS | SPI_MOSI | SPI_SCK;
-    SPI_DDR &= ~(SPI_MISO);
-
-    /* Set SS high */
-    SPI_PORT |= SPI_SS;
-
-    /* SPI should be mode (0,0), MSB first, double clock rate*/
-    SPCR &= ~(_BV(CPOL) | _BV(CPHA) | _BV(DORD));
-    SPSR |= _BV(SPI2X);
-
-    /* Become master */
-    SPCR |= _BV(MSTR);
-
-    /* Finally, enable the SPI periph */
-    SPCR |= _BV(SPE);
-    
-    _delay_ms(100);
-    
     // Set up device
     for(i = 0; CONFIG[i][0] != 255; i++)
         rf69_spiWrite(CONFIG[i][0], CONFIG[i][1]);
@@ -87,18 +58,15 @@ uint8_t rf69_spiRead(const uint8_t reg)
 {
     uint8_t data;
 
-    RFM_SS_ASSERT();
+    spi_ss_assert();
 
     /* Transmit the reg we want to read from */
-    SPDR = reg;
-    while(!(SPSR & (1<<SPIF)));
+    data = spi_exchange_single(reg);
 
     /* Read the data back */
-    SPDR = 0xFF; // dummy byte
-    while(!(SPSR & (1<<SPIF)));
-    data = SPDR;
+    data = spi_exchange_single(0xFF);
 
-    RFM_SS_DEASSERT();
+    spi_ss_deassert();
 
     return data;
 }
@@ -112,17 +80,15 @@ uint8_t rf69_spiRead(const uint8_t reg)
  */
 void rf69_spiWrite(const uint8_t reg, const uint8_t val)
 {
-    RFM_SS_ASSERT();
+    spi_ss_assert();
 
     /* Transmit the reg address */
-    SPDR = reg | RFM69_SPI_WRITE_MASK;
-    while(!(SPSR & (1<<SPIF)));
+    spi_exchange_single(reg | RFM69_SPI_WRITE_MASK);
 
     /* Transmit the value for this address */
-    SPDR = val;
-    while(!(SPSR & (1<<SPIF)));
+    spi_exchange_single(val);
 
-    RFM_SS_DEASSERT();
+    spi_ss_deassert();
 }
 
 /**
@@ -134,19 +100,15 @@ void rf69_spiWrite(const uint8_t reg, const uint8_t val)
  */
 void rf69_spiBurstRead(const uint8_t reg, uint8_t* dest, uint8_t len)
 {
-    RFM_SS_ASSERT();
+    spi_ss_assert();
     
-    SPDR = (reg & ~RFM69_SPI_WRITE_MASK); // Send the start address with the write mask off
-    while(!(SPSR & (1<<SPIF)));
-
+    // Send the start address with the write mask off
+    spi_exchange_single(reg & ~RFM69_SPI_WRITE_MASK);
+    
     while(len--)
-    {
-        SPDR = 0xFF;
-        while(!(SPSR & (1<<SPIF)));
-        *dest++ = SPDR;
-    }
+        *dest++ = spi_exchange_single(0xFF);
 
-    RFM_SS_DEASSERT();
+    spi_ss_deassert();
 }
 
 /**
@@ -157,18 +119,15 @@ void rf69_spiBurstRead(const uint8_t reg, uint8_t* dest, uint8_t len)
  */
 void rf69_spiBurstWrite(uint8_t reg, const uint8_t* src, uint8_t len)
 {
-    RFM_SS_ASSERT();
+    spi_ss_assert();
     
-    SPDR = reg | RFM69_SPI_WRITE_MASK; // Send the start address with the write mask on
-    while(!(SPSR & (1<<SPIF)));
+    // Send the start address with the write mask on
+    spi_exchange_single(reg | RFM69_SPI_WRITE_MASK); 
 
     while(len--)
-    {
-        SPDR = *src++;
-        while(!(SPSR & (1<<SPIF)));
-    }
-        
-    RFM_SS_DEASSERT();
+        spi_exchange_single(*src++);
+
+    spi_ss_deassert();
 }
 
 /**
@@ -178,24 +137,19 @@ void rf69_spiBurstWrite(uint8_t reg, const uint8_t* src, uint8_t len)
  */
 void rf69_spiFifoWrite(const uint8_t* src, uint8_t len)
 {
-    RFM_SS_ASSERT();
+    spi_ss_assert();
     
     // Send the start address with the write mask on
-    SPDR = RFM69_REG_00_FIFO | RFM69_SPI_WRITE_MASK; // Send the start address with the write mask on
-    while(!(SPSR & (1<<SPIF)));
+    spi_exchange_single(RFM69_REG_00_FIFO | RFM69_SPI_WRITE_MASK);
     
     // First byte is packet length
-    SPDR = len;
-    while(!(SPSR & (1<<SPIF)));
+    spi_exchange_single(len);
 
     // Then write the packet
     while(len--)
-    {
-        SPDR = *src++;
-        while(!(SPSR & (1<<SPIF)));
-    }
-    	
-    RFM_SS_DEASSERT();
+        spi_exchange_single(*src++);
+
+    spi_ss_deassert();
 }
 
 /**
@@ -205,7 +159,8 @@ void rf69_spiFifoWrite(const uint8_t* src, uint8_t len)
  */
 void rf69_setMode(const uint8_t newMode)
 {
-    rf69_spiWrite(RFM69_REG_01_OPMODE, (rf69_spiRead(RFM69_REG_01_OPMODE) & 0xE3) | newMode);
+    rf69_spiWrite(RFM69_REG_01_OPMODE, 
+            (rf69_spiRead(RFM69_REG_01_OPMODE) & 0xE3) | newMode);
     _mode = newMode;
 }
 

@@ -22,15 +22,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/* SPI pins and ports */
-#define SPI_DDR     DDRB
-#define SPI_PORT    PORTB
-#define SPI_SS      _BV(2)
-#define SPI_MOSI    _BV(3)
-#define SPI_MISO    _BV(4)
-#define SPI_SCK     _BV(5)
-
-
 /* Write commands to the RFM have this bit set/clear ?? */
 #define RFM69_SPI_WRITE_MASK 0x80
 
@@ -789,5 +780,10 @@ void rf69_send(const uint8_t* data, uint8_t len, uint8_t power);
 void rf69_clearFifo(void);
 int8_t rf69_readTemp(void);
 int16_t rf69_sampleRssi(void);
+
+extern bool rfm69_init(void);
+extern uint8_t spi_exchange_single(uint8_t out);
+extern void spi_ss_assert(void);
+extern void spi_ss_deassert(void);
 
 #endif /* __RFM69_H__ */
