@@ -19,8 +19,8 @@
 #include <avr/io.h>
 #include <util/delay.h>
 
-#include "RFM69.h"
-#include "RFM69Config.h"
+#include "ukhasnet-rfm69.h"
+#include "ukhasnet-rfm69-config.h"
 
 /** Track the current mode of the radio */
 static uint8_t _mode;
