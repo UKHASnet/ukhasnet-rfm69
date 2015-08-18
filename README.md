@@ -3,23 +3,15 @@ An RFM69 library maintained by and for the UKHASnet network
 
 ## Installation
 
-To begin with, you need a working AVR toolchain. To check you have this, run
-`avr-gcc --version` and check you get some useful output.  
-
 The best way to use this library is to add it as a git submodule to your
-repository. To do this, `cd` to the directory in which your sensor firmware is
+repository. To do this, `cd` to the directory in which your firmware is
 located, and run:  
 
 `git submodule add git@github.com:UKHASnet/ukhasnet-rfm69.git ukhasnet-rfm69`
 
 This will create a directory called `ukhasnet-rfm69` in your project directory.  
 
-To build the library, first open Makefile in the `ukhasnet-rfm69` directory,
-and adjust the settings to the AVR part you are using (DEVICE, e.g. m168) and
-the clock speed in Hertz (CLOCK, e.g. 8000000 for 8MHz).  
-
-Run `make` to build the library. This will create `libukhasnet-rfm69.a` in this
-directory.  
+The library is built as part of your firmware, rather than separately. 
 
 ## Usage
 
@@ -27,17 +19,20 @@ The library is hardware agnostic. The files `spi_conf.c` and `spi_conf.h`
 should be created by you, the user, which define device specific functions 
 that allow the library to communicate with the RFM69 module.  
 
-You will need to include `ukhasnet-rfm69.h` in your application code, and make
-sure `ukhasnet-rfm69.c` is built into the binary by your Makefile/IDE.  
-
 A generic example of these files can be found in `spi_conf/` and
 device-specific examples in that folder. For example, a working SPI driver for
 the ATMEGA168 can be found in `spi_conf/atmega168/`.  
 
+1. Ensure the `ukhasnet-rfm69/` directory is in your include path (-I
+   for gcc-type compilers).
+2. `#include "ukhasnet-rfm-69.h"` in your firmware.
+3. Populate the blank `spi_conf.c` or copy an existing one for your hardware
+   into your firmware directory.
+
 ## Updating
 
 To update the library, `cd` into the `ukhasnet-rfm69` library directory and run
-`git pull`. You will then need to run `make` again to build the new version of
+`git pull`. Building your firmware will automatically build the new version of
 the library.  
 
 ## Information
