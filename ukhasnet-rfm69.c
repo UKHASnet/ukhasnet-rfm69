@@ -1,9 +1,11 @@
 /**
- * RFM69.c
- *
+ * \mainpage
+ * 
+ * \section About
  * This file is part of the UKHASNet (ukhas.net) maintained RFM69 library for
  * use with all UKHASnet nodes, including Arduino, AVR and ARM.
  *
+ * \section Authorship
  * Ported to Arduino 2014 James Coxon
  * Ported, tidied and hardware abstracted by Jon Sowman, 2015
  *
@@ -14,6 +16,10 @@
  * Ported to mbed by Karl Zweimueller
  *
  * Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
+ *
+ * @file ukhasnet-rfm69.c
+ * @addtogroup ukhasnet-rfm69
+ * @{
  */
 
 #include <avr/io.h>
@@ -420,3 +426,7 @@ rfm_status_t rf69_sampleRssi(int16_t* rssi)
 
     return RFM_OK;
 }
+
+/**
+ * @}
+ */

@@ -1,9 +1,11 @@
 /**
- * RFM69.h
- *
+ * \mainpage
+ * 
+ * \section About
  * This file is part of the UKHASNet (ukhas.net) maintained RFM69 library for
  * use with all UKHASnet nodes, including Arduino, AVR and ARM.
  *
+ * \section Authorship
  * Ported to Arduino 2014 James Coxon
  * Ported, tidied and hardware abstracted by Jon Sowman, 2015
  *
@@ -14,6 +16,10 @@
  * Ported to mbed by Karl Zweimueller
  *
  * Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
+ *
+ * @file ukhasnet-rfm69.h
+ * @addtogroup ukhasnet-rfm69
+ * @{
  */
 
 #ifndef __RFM69_H__
@@ -803,3 +809,7 @@ void spi_ss_assert(void);
 void spi_ss_deassert(void);
 
 #endif /* __RFM69_H__ */
+
+/**
+ * @}
+ */

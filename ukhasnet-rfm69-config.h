@@ -1,9 +1,11 @@
 /**
- * RFM69Config.h
- *
+ * \mainpage
+ * 
+ * \section About
  * This file is part of the UKHASNet (ukhas.net) maintained RFM69 library for
  * use with all UKHASnet nodes, including Arduino, AVR and ARM.
  *
+ * \section Authorship
  * Ported to Arduino 2014 James Coxon
  * Ported, tidied and hardware abstracted by Jon Sowman, 2015
  *
@@ -14,6 +16,10 @@
  * Ported to mbed by Karl Zweimueller
  *
  * Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
+ *
+ * @file ukhasnet-rfm69-config.h
+ * @addtogroup ukhasnet-rfm69
+ * @{
  */
 
 #ifndef __RFM69CONFIG_H__
@@ -75,3 +81,6 @@ static const rfm_reg_t CONFIG[][2] =
 
 #endif /* __RFM69CONFIG_H__ */
 
+/**
+ * @}
+ */
