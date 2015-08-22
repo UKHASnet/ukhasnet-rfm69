@@ -7,12 +7,15 @@
  *
  * \section Authorship
  * Ported to Arduino 2014 James Coxon
+ *
  * Ported, tidied and hardware abstracted by Jon Sowman, 2015
  *
  * Copyright (C) 2014 Phil Crump
+ *
  * Copyright (C) 2015 Jon Sowman <jon@jonsowman.com>
  *
  * Based on RF22 Copyright (C) 2011 Mike McCauley
+ *
  * Ported to mbed by Karl Zweimueller
  *
  * Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
@@ -338,7 +341,8 @@ rfm_status_t rf69_clearFifo(void)
 /**
  * The RFM69 has an onboard temperature sensor, read its value
  * @warning RFM69 must be in one of the active modes for temp sensor to work.
- * @param temp The temperature in degrees C
+ * @param temperature A pointer to the variable into which the temperature will
+ * be read by this method.
  * @returns RFM_OK for success, RFM_FAIL for failure, RFM_TIMEOUT if there is a
  * timeout due to the sensor on the RFM not starting and/or finishing a
  * conversion.
