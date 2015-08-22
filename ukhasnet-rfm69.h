@@ -26,7 +26,7 @@
 typedef uint8_t rfm_reg_t;
 
 /* Status codes for return values from library functions */
-typedef enum rfm_status_t { RFM_OK, RFM_FAIL} rfm_status_t;
+typedef enum rfm_status_t { RFM_OK, RFM_FAIL, RFM_TIMEOUT } rfm_status_t;
 
 /* Write commands to the RFM have this bit set/clear ?? */
 #define RFM69_SPI_WRITE_MASK 0x80

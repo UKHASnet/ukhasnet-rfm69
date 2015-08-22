@@ -358,7 +358,7 @@ rfm_status_t rf69_readTemp(int8_t* temperature)
         if(++timeout > 50)
         {
             *temperature = -127.0;
-            return RFM_FAIL;
+            return RFM_TIMEOUT;
         }
         rf69_spiWrite(RFM69_REG_4E_TEMP1, RF_TEMP1_MEAS_START);
     }
@@ -373,7 +373,7 @@ rfm_status_t rf69_readTemp(int8_t* temperature)
         if(++timeout > 10)
         {
             *temperature = -127.0;
-            return RFM_FAIL;
+            return RFM_TIMEOUT;
         }
     }
 
