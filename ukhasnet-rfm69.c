@@ -333,7 +333,9 @@ rfm_status_t rf69_clearFifo(void)
  * The RFM69 has an onboard temperature sensor, read its value
  * @warning RFM69 must be in one of the active modes for temp sensor to work.
  * @param temp The temperature in degrees C
- * @returns RFM_OK for success, RFM_FAIL for failure.
+ * @returns RFM_OK for success, RFM_FAIL for failure, RFM_TIMEOUT if there is a
+ * timeout due to the sensor on the RFM not starting and/or finishing a
+ * conversion.
  */
 rfm_status_t rf69_readTemp(int8_t* temperature)
 {
