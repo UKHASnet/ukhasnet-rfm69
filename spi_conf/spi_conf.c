@@ -25,7 +25,7 @@
  * RFM69, and become a master.
  * @returns True on success, false on failure.
  */
-bool rfm69_init(void)
+rfm_status_t rfm69_init(void)
 {
     /* Set up the SPI peripheral */
 
@@ -43,7 +43,7 @@ bool rfm69_init(void)
  * @param out The byte to be sent
  * @returns The byte received
  */
-uint8_t spi_exchange_single(uint8_t out)
+rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in)
 {
     /* Insert code to send a byte and receive a byte at the same time */
 }

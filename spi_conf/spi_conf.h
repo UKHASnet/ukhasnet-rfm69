@@ -28,8 +28,8 @@
  * documentation on what you need to put in them, see spi_conf.c in the same
  * directory as this file.
  */
-bool rfm69_init(void);
-uint8_t spi_exchange_single(uint8_t out);
+rfm_status_t rfm69_init(void);
+rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in);
 void spi_ss_assert(void);
 void spi_ss_deassert(void);
 
