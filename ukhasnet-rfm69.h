@@ -22,6 +22,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+/* Size of a register in the RFM */
+typedef uint8_t rfm_reg_t;
+
+/* Status codes for return values from library functions */
+typedef enum rfm_status_t { RFM_OK, RFM_FAIL} rfm_status_t;
+
 /* Write commands to the RFM have this bit set/clear ?? */
 #define RFM69_SPI_WRITE_MASK 0x80
 
@@ -769,26 +775,30 @@
 #define RF_TESTLNA_SENSITIVE        0x2D  //
 
 /* Public prototypes here */
-bool rf69_init(void);
-uint8_t rf69_spiRead(const uint8_t reg);
-void rf69_spiWrite(const uint8_t reg, const uint8_t val);
-void rf69_spiBurstRead(const uint8_t reg, uint8_t* dest, uint8_t len);
-void rf69_spiBurstWrite(uint8_t reg, const uint8_t* src, uint8_t len);
-void rf69_spiFifoWrite(const uint8_t* src, uint8_t len);
-void rf69_setMode(const uint8_t newMode);
-bool rf69_receive(uint8_t* buf, uint8_t* len, int16_t* lastrssi);
-void rf69_send(const uint8_t* data, uint8_t len, uint8_t power);
-void rf69_clearFifo(void);
-int8_t rf69_readTemp(void);
-int16_t rf69_sampleRssi(void);
+rfm_status_t rf69_init(void);
+rfm_status_t rf69_spiRead(const rfm_reg_t reg, rfm_reg_t* result);
+rfm_status_t rf69_spiWrite(const rfm_reg_t reg, const rfm_reg_t val);
+rfm_status_t rf69_spiBurstRead(const rfm_reg_t reg, rfm_reg_t* dest, 
+        uint8_t len);
+rfm_status_t rf69_spiBurstWrite(rfm_reg_t reg, const rfm_reg_t* src, 
+        uint8_t len);
+rfm_status_t rf69_spiFifoWrite(const rfm_reg_t* src, uint8_t len);
+rfm_status_t rf69_setMode(const rfm_reg_t newMode);
+rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi,
+        bool* rfm_packet_waiting);
+rfm_status_t rf69_send(const rfm_reg_t* data, uint8_t len, 
+        const uint8_t power);
+rfm_status_t rf69_clearFifo(void);
+rfm_status_t rf69_readTemp(int8_t* temperature);
+rfm_status_t rf69_sampleRssi(int16_t* rssi);
 
 /**
  * SPI device driver functions. These are to be provided by the user.
  * Prototypes are provided here such that the library can be built.
  * Documentation can be found in spi_conf.c.
  */
-bool rfm69_init(void);
-uint8_t spi_exchange_single(uint8_t out);
+rfm_status_t rfm69_init(void);
+rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in);
 void spi_ss_assert(void);
 void spi_ss_deassert(void);
 
