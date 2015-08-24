@@ -28,9 +28,9 @@
  * documentation on what you need to put in them, see spi_conf.c in the same
  * directory as this file.
  */
-rfm_status_t rfm69_init(void);
+rfm_status_t spi_init(void);
 rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in);
-void spi_ss_assert(void);
-void spi_ss_deassert(void);
+rfm_status_t spi_ss_assert(void);
+rfm_status_t spi_ss_deassert(void);
 
 #endif /* __SPI_CONF_H__ */

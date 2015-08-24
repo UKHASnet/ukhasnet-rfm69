@@ -787,10 +787,10 @@ rfm_status_t rf69_sampleRssi(int16_t* rssi);
  * Prototypes are provided here such that the library can be built.
  * Documentation can be found in spi_conf.c.
  */
-rfm_status_t rfm69_init(void);
+rfm_status_t spi_init(void);
 rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in);
-void spi_ss_assert(void);
-void spi_ss_deassert(void);
+rfm_status_t spi_ss_assert(void);
+rfm_staus_t spi_ss_deassert(void);
 
 #endif /* __RFM69_H__ */
 

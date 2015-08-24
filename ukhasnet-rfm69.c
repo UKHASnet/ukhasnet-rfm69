@@ -43,6 +43,10 @@ rfm_status_t rf69_init(void)
     uint8_t i;
     rfm_reg_t res;
 
+    // Call the user setup function to configure the SPI peripheral
+    if( spi_init() != RFM_OK )
+        return RFM_FAIL;
+
     // Set up device
     for(i = 0; CONFIG[i][0] != 255; i++)
         rf69_spiWrite(CONFIG[i][0], CONFIG[i][1]);
