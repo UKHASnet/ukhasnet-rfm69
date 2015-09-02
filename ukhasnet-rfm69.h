@@ -766,21 +766,23 @@ typedef enum rfm_status_t { RFM_OK, RFM_FAIL, RFM_TIMEOUT } rfm_status_t;
 
 /* Public prototypes here */
 rfm_status_t rf69_init(void);
-rfm_status_t rf69_spiRead(const rfm_reg_t reg, rfm_reg_t* result);
-rfm_status_t rf69_spiWrite(const rfm_reg_t reg, const rfm_reg_t val);
-rfm_status_t rf69_spiBurstRead(const rfm_reg_t reg, rfm_reg_t* dest, 
-        uint8_t len);
-rfm_status_t rf69_spiBurstWrite(rfm_reg_t reg, const rfm_reg_t* src, 
-        uint8_t len);
-rfm_status_t rf69_spiFifoWrite(const rfm_reg_t* src, uint8_t len);
-rfm_status_t rf69_setMode(const rfm_reg_t newMode);
+rfm_status_t rf69_read_temp(int8_t* temperature);
 rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi,
         bool* rfm_packet_waiting);
 rfm_status_t rf69_send(const rfm_reg_t* data, uint8_t len, 
         const uint8_t power);
-rfm_status_t rf69_clearFifo(void);
-rfm_status_t rf69_readTemp(int8_t* temperature);
-rfm_status_t rf69_sampleRssi(int16_t* rssi);
+rfm_status_t rf69_set_mode(const rfm_reg_t newMode);
+
+/* Private functions */
+rfm_status_t _rf69_read(const rfm_reg_t reg, rfm_reg_t* result);
+rfm_status_t _rf69_write(const rfm_reg_t reg, const rfm_reg_t val);
+rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest, 
+        uint8_t len);
+rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src, 
+        uint8_t len);
+rfm_status_t _rf69_fifo_write(const rfm_reg_t* src, uint8_t len);
+rfm_status_t _rf69_clear_fifo(void);
+rfm_status_t _rf69_sample_rssi(int16_t* rssi);
 
 /**
  * SPI device driver functions. These are to be provided by the user.
