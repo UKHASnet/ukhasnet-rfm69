@@ -414,7 +414,7 @@ rfm_status_t _rf69_sample_rssi(int16_t* rssi)
 
     /* Must only be called in RX mode */
     if (_mode != RFM69_MODE_RX)
-        return 0;
+        return RFM_FAIL;
 
     /* Trigger RSSI Measurement */
     _rf69_write(RFM69_REG_23_RSSI_CONFIG, RF_RSSI_START);
