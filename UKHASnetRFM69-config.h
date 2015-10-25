@@ -9,7 +9,7 @@
 #ifndef __RFM69CONFIG_H__
 #define __RFM69CONFIG_H__
 
-#include "ukhasnet-rfm69.h"
+#include "UKHASnetRFM69.h"
 
 static const rfm_reg_t CONFIG[][2] =
 {

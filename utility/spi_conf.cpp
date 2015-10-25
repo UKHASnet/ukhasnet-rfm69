@@ -16,23 +16,35 @@
  * Based on RFM69 LowPowerLabs (https://github.com/LowPowerLab/RFM69/)
  */
 
-#include "ukhasnet-rfm69.h"
+#include "UKHASnetRFM69.h"
 #include "spi_conf.h"
 
 /**
  * User SPI setup function. Use this function to set up the SPI peripheral
  * on the microcontroller, such as to setup the IO, set the mode (0,0) for the
  * RFM69, and become a master.
- * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
+ * @returns True on success, false on failure.
  */
 rfm_status_t spi_init(void)
 {
-    /* Set up the SPI peripheral */
+    /* Set up the SPI IO as appropriate */
+    SPI_DDR |= SPI_SS | SPI_MOSI | SPI_SCK;
+    SPI_DDR &= ~(SPI_MISO);
 
-    /*
-     * You should return RFM_OK if everything went well, otherwise return
-     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
-     * */
+    /* Set SS high */
+    SPI_PORT |= SPI_SS;
+
+    /* SPI should be mode (0,0), MSB first, double clock rate*/
+    SPCR &= ~(_BV(CPOL) | _BV(CPHA) | _BV(DORD));
+    SPSR |= _BV(SPI2X);
+
+    /* Become master */
+    SPCR |= _BV(MSTR);
+
+    /* Finally, enable the SPI periph */
+    SPCR |= _BV(SPE);
+
+    /* Return RFM_OK if everything went ok, otherwise RFM_FAIL */
     return RFM_OK;
 }
 
@@ -41,47 +53,31 @@ rfm_status_t spi_init(void)
  * @warn This does not handle SS, since higher level functions might want to do
  * burst read and writes
  * @param out The byte to be sent
- * @param in A pointer into which we place the returned value
- * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
+ * @returns The byte received
  */
 rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in)
 {
-    /* Insert code to send a byte and receive a byte at the same time */
-
-    /*
-     * You should return RFM_OK if everything went well, otherwise return
-     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
-     * */
+    SPDR = out;
+    while(!(SPSR & (1<<SPIF)));
+    *in = SPDR;
     return RFM_OK;
 }
 
 /**
  * User function to assert the slave select pin
- * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
  */
 rfm_status_t spi_ss_assert(void)
 {
-    /* Insert code to assert the SS line */
-
-    /*
-     * You should return RFM_OK if everything went well, otherwise return
-     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
-     * */
+    SPI_PORT &= ~(SPI_SS);
     return RFM_OK;
 }
 
 /**
  * User function to deassert the slave select pin
- * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
  */
 rfm_status_t spi_ss_deassert(void)
 {
-    /* Insert code to deassert the SS line */
-
-    /*
-     * You should return RFM_OK if everything went well, otherwise return
-     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
-     * */
+    SPI_PORT |= (SPI_SS);
     return RFM_OK;
 }
 

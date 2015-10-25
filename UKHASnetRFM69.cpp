@@ -26,10 +26,13 @@
  */
 
 #include <avr/io.h>
+#include <stdint.h>
+#include <stdbool.h>
 #include <util/delay.h>
 
-#include "ukhasnet-rfm69.h"
-#include "ukhasnet-rfm69-config.h"
+#include "UKHASnetRFM69.h"
+#include "UKHASnetRFM69-config.h"
+#include "utility/spi_conf.h"
 
 /** Track the current mode of the radio */
 static rfm_reg_t _mode;
@@ -414,7 +417,7 @@ rfm_status_t _rf69_sample_rssi(int16_t* rssi)
 
     /* Must only be called in RX mode */
     if (_mode != RFM69_MODE_RX)
-        return 0;
+        return RFM_FAIL;
 
     /* Trigger RSSI Measurement */
     _rf69_write(RFM69_REG_23_RSSI_CONFIG, RF_RSSI_START);
