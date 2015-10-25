@@ -23,14 +23,4 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-/**
- * These functions are all required and are called by the library. For
- * documentation on what you need to put in them, see spi_conf.c in the same
- * directory as this file.
- */
-bool rfm69_init(void);
-uint8_t spi_exchange_single(uint8_t out);
-void spi_ss_assert(void);
-void spi_ss_deassert(void);
-
 #endif /* __SPI_CONF_H__ */

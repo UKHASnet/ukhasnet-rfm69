@@ -23,17 +23,17 @@
  * User SPI setup function. Use this function to set up the SPI peripheral
  * on the microcontroller, such as to setup the IO, set the mode (0,0) for the
  * RFM69, and become a master.
- * @returns True on success, false on failure.
+ * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
  */
-bool rfm69_init(void)
+rfm_status_t spi_init(void)
 {
     /* Set up the SPI peripheral */
 
-    /* You must call the library RFM69 initialisation function once the
-     * hardware has been configured above. This function relies on SPI
-     * communication to be possible, and configures the RFM69
-     */
-    return rf69_init();
+    /*
+     * You should return RFM_OK if everything went well, otherwise return
+     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
+     * */
+    return RFM_OK;
 }
 
 /**
@@ -41,26 +41,47 @@ bool rfm69_init(void)
  * @warn This does not handle SS, since higher level functions might want to do
  * burst read and writes
  * @param out The byte to be sent
- * @returns The byte received
+ * @param in A pointer into which we place the returned value
+ * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
  */
-uint8_t spi_exchange_single(uint8_t out)
+rfm_status_t spi_exchange_single(const rfm_reg_t out, rfm_reg_t* in)
 {
     /* Insert code to send a byte and receive a byte at the same time */
+
+    /*
+     * You should return RFM_OK if everything went well, otherwise return
+     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
+     * */
+    return RFM_OK;
 }
 
 /**
  * User function to assert the slave select pin
+ * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
  */
-void spi_ss_assert(void)
+rfm_status_t spi_ss_assert(void)
 {
     /* Insert code to assert the SS line */
+
+    /*
+     * You should return RFM_OK if everything went well, otherwise return
+     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
+     * */
+    return RFM_OK;
 }
 
 /**
  * User function to deassert the slave select pin
+ * @returns RFM_OK on success, RFM_FAIL or RFM_TIMEOUT on failure
  */
-void spi_ss_deassert(void)
+rfm_status_t spi_ss_deassert(void)
 {
     /* Insert code to deassert the SS line */
+
+    /*
+     * You should return RFM_OK if everything went well, otherwise return
+     * RFM_FAIL or RFM_TIMEOUT to signal that something went wrong.
+     * */
+    return RFM_OK;
 }
 

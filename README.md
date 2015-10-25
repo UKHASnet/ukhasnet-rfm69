@@ -25,7 +25,7 @@ the ATMEGA168 can be found in `spi_conf/atmega168/`.
 
 1. Ensure the `ukhasnet-rfm69/` directory is in your include path (-I
    for gcc-type compilers).
-2. `#include "ukhasnet-rfm-69.h"` in your firmware.
+2. `#include "ukhasnet-rfm69.h"` in your firmware.
 3. Populate the blank `spi_conf.c` or copy an existing one for your hardware
    into your firmware directory.
 
