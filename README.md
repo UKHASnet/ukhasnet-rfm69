@@ -1,44 +1,43 @@
 # ukhasnet-rfm69
 An RFM69 library maintained by and for the UKHASnet network
 
-## Installation
+## Installation on Arduino
 
-The best way to use this library is to add it as a git submodule to your
-repository. To do this, `cd` to the directory in which your firmware is
-located, and run:  
+## From Latest Release
 
-`git submodule add git@github.com:UKHASnet/ukhasnet-rfm69.git ukhasnet-rfm69`
+Download the Latest Arduino Release .zip from the Releases Tab on Github.
 
-This will create a directory called `ukhasnet-rfm69` in your project directory.  
+In the Arduino IDE go to the 'Sketch' menu => 'Include Library' => 'Add .ZIP Library...'
 
-The library is built as part of your firmware, rather than separately. 
+Browse to and select the .zip you downloaded. This will add the library to your project.
+
+## From Current Source
+
+Alternatively git clone this repository into a folder call 'UKHASnetRFM69' with:
+
+`git clone -b arduino https://github.com/UKHASnet/ukhasnet-rfm69.git UKHASnetRFM69`
+
+Create a .zip file of the folder.
+
+In the Arduino IDE go to the 'Sketch' menu => 'Include Library' => 'Add .ZIP Library...'
+
+Browse to and select the .zip you created. This will add the library to your project.
 
 ## Usage
 
-The library is hardware agnostic. The files `spi_conf.c` and `spi_conf.h`
-should be created by you, the user, which define device specific functions 
-that allow the library to communicate with the RFM69 module.  
+rfm_status_t rf69_init(void);
 
-A generic example of these files can be found in `spi_conf/` and
-device-specific examples in that folder. For example, a working SPI driver for
-the ATMEGA168 can be found in `spi_conf/atmega168/`.  
+rfm_status_t rf69_read_temp(int8_t* temperature);
 
-1. Ensure the `ukhasnet-rfm69/` directory is in your include path (-I
-   for gcc-type compilers).
-2. `#include "ukhasnet-rfm69.h"` in your firmware.
-3. Populate the blank `spi_conf.c` or copy an existing one for your hardware
-   into your firmware directory.
+rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi, bool* rfm_packet_waiting);
+        
+rfm_status_t rf69_send(const rfm_reg_t* data, uint8_t len, const uint8_t power);
 
-## Updating
-
-To update the library, `cd` into the `ukhasnet-rfm69` library directory and run
-`git pull`. Building your firmware will automatically build the new version of
-the library.  
+rfm_status_t rf69_set_mode(const rfm_reg_t newMode);
 
 ## Information
 
 This library is maintained for use in the [UKHASnet](http://ukhas.net) low
-power sensor network, whose canonical node formulation uses the RFM69 device.  
+power sensor network, whose canonical node formulation uses the RFM69 device.
 
-Created and released into the Public Domain by [Jon
-Sowman](http://github.com/jonsowman) 2015.  
+Created and released into the Public Domain by [Jon Sowman](http://github.com/jonsowman) 2015.
