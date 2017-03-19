@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.11"/>
-<title>libukhasnet-rfm69: Globals</title>
+<title>libukhasnet-rfm69: ukhasnet-rfm69</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -39,9 +39,9 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
-      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
+      <li class="current"><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
-      <li class="current"><a href="files.html"><span>Files</span></a></li>
+      <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
         <span class="left">
@@ -60,20 +60,6 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
-  <div id="navrow2" class="tabs2">
-    <ul class="tablist">
-      <li><a href="files.html"><span>File&#160;List</span></a></li>
-      <li class="current"><a href="globals.html"><span>Globals</span></a></li>
-    </ul>
-  </div>
-  <div id="navrow3" class="tabs2">
-    <ul class="tablist">
-      <li><a href="globals.html"><span>All</span></a></li>
-      <li class="current"><a href="globals_func.html"><span>Functions</span></a></li>
-      <li><a href="globals_vars.html"><span>Variables</span></a></li>
-    </ul>
-  </div>
-</div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -88,49 +74,36 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </iframe>
 </div>
 
+</div><!-- top -->
+<div class="header">
+  <div class="headertitle">
+<div class="title">ukhasnet-rfm69 </div>  </div>
+</div><!--header-->
 <div class="contents">
-&#160;<ul>
-<li>_rf69_burst_read()
-: <a class="el" href="group__ukhasnet-rfm69.html#gae3866abd0d68d5776e3d985fbef5c3e5">ukhasnet-rfm69.c</a>
-</li>
-<li>_rf69_burst_write()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga66c71b35ec36288d123e9452c9c28dec">ukhasnet-rfm69.c</a>
-</li>
-<li>_rf69_clear_fifo()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga0d1dda34f5bd506cf4c0a306977f9750">ukhasnet-rfm69.c</a>
-</li>
-<li>_rf69_fifo_write()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga9bf99ee2390785bde26a7e6727f5b871">ukhasnet-rfm69.c</a>
-</li>
-<li>_rf69_read()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga1af60ff1b4881f8b72668e0244915104">ukhasnet-rfm69.c</a>
-</li>
-<li>_rf69_sample_rssi()
-: <a class="el" href="group__ukhasnet-rfm69.html#gad8e59beb04953b798c2971189f1e59ae">ukhasnet-rfm69.c</a>
-</li>
-<li>_rf69_write()
-: <a class="el" href="group__ukhasnet-rfm69.html#gaf4832c4029cf1af468505bed5d7c9c9a">ukhasnet-rfm69.c</a>
-</li>
-<li>rf69_init()
-: <a class="el" href="group__ukhasnet-rfm69.html#gaf922890dde79fd2a28e4ffafb92a3163">ukhasnet-rfm69.c</a>
-</li>
-<li>rf69_read_temp()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga4cc024494aa4de13ea7d7c6602ccd9c1">ukhasnet-rfm69.c</a>
-</li>
-<li>rf69_receive()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga360e1988ff21d34a6ef816c7188cbc0a">ukhasnet-rfm69.c</a>
-</li>
-<li>rf69_send()
-: <a class="el" href="group__ukhasnet-rfm69.html#ga52cd31590567553dcd128de188dc7286">ukhasnet-rfm69.c</a>
-</li>
-<li>rf69_set_mode()
-: <a class="el" href="group__ukhasnet-rfm69.html#gac2cb573050a74ae7e97ee8db343f2c4c">ukhasnet-rfm69.c</a>
-</li>
-<li>spi_init()
-: <a class="el" href="group__ukhasnet-rfm69.html#gaed41e95d259dba22dd6bef379c33c8a8">ukhasnet-rfm69.h</a>
-</li>
-</ul>
-</div><!-- contents -->
+<div class="textblock"><p>An RFM69 library maintained by and for the UKHASnet network</p>
+<h2>Installation</h2>
+<p>The best way to use this library is to add it as a git submodule to your repository. To do this, <code>cd</code> to the directory in which your firmware is located, and run:</p>
+<p><code>git submodule add git@github.com:UKHASnet/ukhasnet-rfm69.git ukhasnet-rfm69</code></p>
+<p>This will create a directory called <code>ukhasnet-rfm69</code> in your project directory.</p>
+<p>The library is built as part of your firmware, rather than separately.</p>
+<h2>Usage</h2>
+<p>The library is hardware agnostic. The files <code>spi_conf.c</code> and <code>spi_conf.h</code> should be created by you, the user, which define device specific functions that allow the library to communicate with the RFM69 module.</p>
+<p>A generic example of these files can be found in <code>spi_conf/</code> and device-specific examples in that folder. For example, a working SPI driver for the ATMEGA168 can be found in <code>spi_conf/atmega168/</code>.</p>
+<ol type="1">
+<li>Ensure the <code>ukhasnet-rfm69/</code> directory is in your include path (-I for gcc-type compilers).</li>
+<li><code>#include "ukhasnet-rfm69.h"</code> in your firmware.</li>
+<li>Populate the blank <code>spi_conf.c</code> or copy an existing one for your hardware into your firmware directory.</li>
+</ol>
+<h2>Updating</h2>
+<p>To update the library, <code>cd</code> into the <code>ukhasnet-rfm69</code> library directory and run <code>git pull</code>. Building your firmware will automatically build the new version of the library.</p>
+<h2>Documentation</h2>
+<p>Doxygen is used to generate HTML documentation which is stored in <em>docs/</em> and accessible at <a href="http://ukhasnet.github.io/ukhasnet-rfm69/">ukhasnet.github.io/ukhasnet-rfm69/</a></p>
+<h4>Updating</h4>
+<p>To update the documentation, install <code>doxygen</code> and run the command <code>doxygen</code> in the root of the repository.</p>
+<h2>Information</h2>
+<p>This library is maintained for use in the <a href="http://ukhas.net">UKHASnet</a> low power sensor network, whose canonical node formulation uses the RFM69 device.</p>
+<p>Created and released into the Public Domain by <a href="http://github.com/jonsowman">Jon Sowman</a> 2015. </p>
+</div></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
