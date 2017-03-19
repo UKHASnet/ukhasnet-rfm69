@@ -213,7 +213,8 @@ rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi,
     /* Check IRQ register for payloadready flag
      * (indicates RXed packet waiting in FIFO) */
     _rf69_read(RFM69_REG_28_IRQ_FLAGS2, &res);
-    if (res & RF_IRQFLAGS2_PAYLOADREADY) {
+    if (res & RF_IRQFLAGS2_PAYLOADREADY)
+    {
         /* Get packet length from first byte of FIFO */
         _rf69_read(RFM69_REG_00_FIFO, len);
         *len += 1;
@@ -224,14 +225,13 @@ rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi,
         *lastrssi = -(res/2);
         /* Clear the radio FIFO (found in HopeRF demo code) */
         _rf69_clear_fifo();
+
         *rfm_packet_waiting = true;
         return RFM_OK;
-    } else {
-        *rfm_packet_waiting = false;
-        return RFM_OK;
     }
-    
-    return RFM_FAIL;
+
+    *rfm_packet_waiting = false;
+    return RFM_OK;
 }
 
 /**
