@@ -39,8 +39,6 @@ static rfm_status_t _rf69_read(const rfm_reg_t reg, rfm_reg_t* result);
 static rfm_status_t _rf69_write(const rfm_reg_t reg, const rfm_reg_t val);
 static rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest, 
         uint8_t len);
-static rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src, 
-        uint8_t len);
 static rfm_status_t _rf69_fifo_write(const rfm_reg_t* src, uint8_t len);
 static rfm_status_t _rf69_clear_fifo(void);
 
@@ -143,31 +141,6 @@ static rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest,
         spi_exchange_single(0xFF, dest);
         dest++;
     }
-
-    spi_ss_deassert();
-
-    return RFM_OK;
-}
-
-/**
- * Write a given number of bytes into the registers in the RFM69.
- * @param reg The first byte address into which to write
- * @param src A pointer into the source data buffer
- * @param len The number of bytes to write
- * @returns RFM_OK for success, RFM_FAIL for failure.
- */
-static rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src, 
-        uint8_t len)
-{
-    rfm_reg_t dummy;
-
-    spi_ss_assert();
-    
-    /* Send the start address with the write mask on */
-    spi_exchange_single(reg | RFM69_SPI_WRITE_MASK, &dummy); 
-
-    while (len--)
-        spi_exchange_single(*src++, &dummy);
 
     spi_ss_deassert();
 
