@@ -34,8 +34,19 @@
 /** Track the current mode of the radio */
 static rfm_reg_t _mode;
 
+/* Private functions */
+static rfm_status_t _rf69_read(const rfm_reg_t reg, rfm_reg_t* result);
+static rfm_status_t _rf69_write(const rfm_reg_t reg, const rfm_reg_t val);
+static rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest, 
+        uint8_t len);
+static rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src, 
+        uint8_t len);
+static rfm_status_t _rf69_fifo_write(const rfm_reg_t* src, uint8_t len);
+static rfm_status_t _rf69_clear_fifo(void);
+static rfm_status_t _rf69_sample_rssi(int16_t* rssi);
+
 /**
- * Initialise the RFM69 device.
+ * Initialise the RFM69 device and set into SLEEP mode (0.1uA)
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
 rfm_status_t rf69_init(void)
@@ -47,18 +58,17 @@ rfm_status_t rf69_init(void)
     if (spi_init() != RFM_OK)
         return RFM_FAIL;
 
+    /* Zero version number, RFM probably not connected/functioning */
+    _rf69_read(RFM69_REG_10_VERSION, &res);
+    if (!res)
+        return RFM_FAIL;
+
     /* Set up device */
     for (i = 0; CONFIG[i][0] != 255; i++)
         _rf69_write(CONFIG[i][0], CONFIG[i][1]);
     
     /* Set initial mode */
-    _mode = RFM69_MODE_RX;
-    rf69_set_mode(_mode);
-
-    /* Zero version number, RFM probably not connected/functioning */
-    _rf69_read(RFM69_REG_10_VERSION, &res);
-    if (!res)
-        return RFM_FAIL;
+    rf69_set_mode(RFM69_MODE_SLEEP);
 
     return RFM_OK;
 }
@@ -70,7 +80,7 @@ rfm_status_t rf69_init(void)
  * @param result A pointer to where to put the result
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_read(const rfm_reg_t reg, rfm_reg_t* result)
+static rfm_status_t _rf69_read(const rfm_reg_t reg, rfm_reg_t* result)
 {
     rfm_reg_t data;
 
@@ -95,7 +105,7 @@ rfm_status_t _rf69_read(const rfm_reg_t reg, rfm_reg_t* result)
  * @param val The value for the address
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_write(const rfm_reg_t reg, const rfm_reg_t val)
+static rfm_status_t _rf69_write(const rfm_reg_t reg, const rfm_reg_t val)
 {
     rfm_reg_t dummy;
 
@@ -120,7 +130,7 @@ rfm_status_t _rf69_write(const rfm_reg_t reg, const rfm_reg_t val)
  * @param len The number of bytes to read
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest, 
+static rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest, 
         uint8_t len)
 {
     rfm_reg_t dummy;
@@ -147,7 +157,7 @@ rfm_status_t _rf69_burst_read(const rfm_reg_t reg, rfm_reg_t* dest,
  * @param len The number of bytes to write
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src, 
+static rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src, 
         uint8_t len)
 {
     rfm_reg_t dummy;
@@ -171,7 +181,7 @@ rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src,
  * @param len Write this number of bytes from the buffer into the FIFO
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_fifo_write(const rfm_reg_t* src, uint8_t len)
+static rfm_status_t _rf69_fifo_write(const rfm_reg_t* src, uint8_t len)
 {
     rfm_reg_t dummy;
 
@@ -222,6 +232,11 @@ rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi,
         bool* rfm_packet_waiting)
 {
     rfm_reg_t res;
+
+    if(_mode != RFM69_MODE_RX)
+    {
+        rf69_set_mode(RFM69_MODE_RX);
+    }
 
     /* Check IRQ register for payloadready flag
      * (indicates RXed packet waiting in FIFO) */
@@ -318,14 +333,6 @@ rfm_status_t rf69_send(const rfm_reg_t* data, uint8_t len,
     return RFM_OK;
 }
 
-#if 0
-void RFM69::SetLnaMode(uint8_t lnaMode) {
-    /* RF_TESTLNA_NORMAL (default) */
-    /* RF_TESTLNA_SENSITIVE */
-    spiWrite(RFM69_REG_58_TEST_LNA, lnaMode);
-}
-#endif
-
 /**
  * Clear the FIFO in the RFM69. We do this by entering STBY mode and then
  * returing to RX mode.
@@ -333,7 +340,7 @@ void RFM69::SetLnaMode(uint8_t lnaMode) {
  * @note Apparently this works... found in HopeRF demo code
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_clear_fifo(void)
+static rfm_status_t _rf69_clear_fifo(void)
 {
     rf69_set_mode(RFM69_MODE_STDBY);
     rf69_set_mode(RFM69_MODE_RX);
@@ -408,7 +415,7 @@ rfm_status_t rf69_read_temp(int8_t* temperature)
  * @param rssi A pointer to an int16_t where we will place the RSSI value
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-rfm_status_t _rf69_sample_rssi(int16_t* rssi)
+static rfm_status_t _rf69_sample_rssi(int16_t* rssi)
 {
     rfm_reg_t res;
 
