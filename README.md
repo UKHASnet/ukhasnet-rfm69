@@ -35,6 +35,14 @@ To update the library, `cd` into the `ukhasnet-rfm69` library directory and run
 `git pull`. Building your firmware will automatically build the new version of
 the library.  
 
+## Documentation
+
+Doxygen is used to generate HTML documentation which is stored in _docs/_ and accessible at [ukhasnet.github.io/ukhasnet-rfm69/](http://ukhasnet.github.io/ukhasnet-rfm69/)
+
+#### Updating
+
+To update the documentation, install `doxygen` and run the command `doxygen` in the root of the repository.
+
 ## Information
 
 This library is maintained for use in the [UKHASnet](http://ukhas.net) low
