@@ -749,6 +749,7 @@ rfm_status_t rf69_receive(rfm_reg_t* buf, rfm_reg_t* len, int16_t* lastrssi,
 rfm_status_t rf69_send(const rfm_reg_t* data, uint8_t len, 
         const uint8_t power);
 rfm_status_t rf69_set_mode(const rfm_reg_t newMode);
+rfm_status_t rf69_sample_rssi(int16_t* rssi);
 
 /**
  * SPI device driver functions. These are to be provided by the user.

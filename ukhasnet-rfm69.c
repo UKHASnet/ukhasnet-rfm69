@@ -43,7 +43,6 @@ static rfm_status_t _rf69_burst_write(rfm_reg_t reg, const rfm_reg_t* src,
         uint8_t len);
 static rfm_status_t _rf69_fifo_write(const rfm_reg_t* src, uint8_t len);
 static rfm_status_t _rf69_clear_fifo(void);
-static rfm_status_t _rf69_sample_rssi(int16_t* rssi);
 
 /**
  * Initialise the RFM69 device and set into SLEEP mode (0.1uA)
@@ -415,7 +414,7 @@ rfm_status_t rf69_read_temp(int8_t* temperature)
  * @param rssi A pointer to an int16_t where we will place the RSSI value
  * @returns RFM_OK for success, RFM_FAIL for failure.
  */
-static rfm_status_t _rf69_sample_rssi(int16_t* rssi)
+rfm_status_t rf69_sample_rssi(int16_t* rssi)
 {
     rfm_reg_t res;
 
